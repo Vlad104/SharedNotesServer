@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 'pg_pass'
+  server:
+    image: vlad104/sharednotesserver:0.0.4
+    ports:
+      - "4000:4000"
+    links:
+      - postgres
+    environment:
+      PG_HOST: 'postgres'
+      PG_DB: 'pg_notes'
+      PG_PW: 'pg_pass'
+      ORIGIN_URL: 'http://188.19.71.119:3000'
+  client:
+    image: vlad104/sharednotesclient:0.0.4
+    ports:
+      - "3000:3000"
+    links:
+      - server
